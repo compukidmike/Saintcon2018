@@ -8,9 +8,9 @@ If you have questions, contact me (compukidmike on twitter/slack/gmail)
 ## I2C Addresses
 To avoid conflicts, here is the list of known minibadge I2C addresses.
 To get your minibadge on this list, submit a pull request or send me a message (compukidmike on twitter/slack/gmail)
-The IC column is so I know which I2C chips to support in the main badge code (no promises, but I'm going to try to add support for as many as I can). If you're using a microcontroller, send me a spec on what I2C commands to send to it.
+The Chip column is so I know which I2C chips to support in the main badge code (no promises, but I'm going to try to add support for as many as I can). If you're using a microcontroller, send me a spec on what I2C commands to send to it.
 
-| Minibadge Name | Address | IC |
+| Minibadge Name | Address | Chip |
 | --- | --- | --- |
 | Example | 0xXX | PCA9536 |
 
