@@ -1,5 +1,4 @@
 # Minibadges
-## Minibadge Specs
 The minbadge spec is here, along with eagle and kicad footprints: https://github.com/lukejenkins/minibadge
 Note that 5V may not be exactly 5V. It'll probably be battery voltage (3.7-4.2V).
 SPI *might* be connected, but don't plan on it. It gets complicated with more minibadges (one CS line per badge).
