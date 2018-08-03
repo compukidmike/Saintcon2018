@@ -15,6 +15,7 @@ The Chip column is so I know which I2C chips to support in the main badge code (
 
 | Minibadge Name | Address | Chip |
 | --- | --- | --- |
+| hakinthebox.com | 0x01 | ATTiny |
 | TBA | 0x29 | ATTiny |
 | TBA | 0x42 | ATTiny |
 | TBA | 0x51 | M24C01 |
