@@ -34,12 +34,18 @@ Polling Message:
 - Badge will send a standard read message (address with R/W bit set to R) 
 - The byte that is returned by the minibadge will determine what happens next 
    - If byte is 0x00, status is empty, badge will end communication 
-   - If byte is 0x01, status is Button Pressed (or similar input) 
+   - If byte is 0x01, status is Button Pressed (or similar input) (NOTE: this just passes button state to the badge. You'll have to write some code to do something with that data)
       - Next byte(s) is button status 
-   - If byte is 0x02, status is Text Message (for display on badge) 
-      - Next bytes are ASCII text 
-   - If byte is 0x03, status is Pixel Message (for display on badge) 
+   - If byte is 0x02, status is Text Message (for display on badge) (will be displayed for as long as it takes to scroll across the dislpay)
+      - Next bytes are ASCII text (max 255 characters)
+   - If byte is 0x03, status is Pixel Message (for display on badge)  (will be displayed for 2 seconds)
       - Next 32 bytes are display columns (Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top)
+   - If byte is 0x04, status is Pixel Message with display time (this enables some animations) (for display on badge)
+      - Next byte is time to display message (range is 0-255 x10 milliseconds, or 0-2.55 seconds in 10 millisecond increments). This will also be the amount of time before the badge polls the minibadge again for the next animation frame
+      - Next 32 bytes are display columns (Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top)
+   - If byte is 0x05, status is Custom Data (this allows your minibadge to send custom data to the badge that will require writing code for the badge to do something with it)
+      - Next byte is length of data in bytes
+      - Next bytes are custom data
 
 Badge Event Message: 
 - Will be sent to minibadges when they occur
