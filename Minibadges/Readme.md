@@ -17,6 +17,7 @@ The Chip column is so I know which I2C chips to support in the main badge code (
 | --- | --- | --- |
 | hakinthebox.com | 0x01 | ATTiny |
 | TBA | 0x29 | ATTiny |
+| Professor Plum | 0x41 | ATTiny |
 | TBA | 0x42 | ATTiny |
 | TBA | 0x51 | M24C01 |
 | TBA | 0x52 | M24C01 |
