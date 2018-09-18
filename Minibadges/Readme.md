@@ -35,9 +35,10 @@ Polling Message:
 - The byte that is returned by the minibadge will determine what happens next 
    - If byte is 0x00, status is empty, badge will end communication 
    - If byte is 0x01, status is Button Pressed (or similar input) (NOTE: this just passes button state to the badge. You'll have to write some code to do something with that data)
-      - Next byte(s) is button status 
+      - Next byte is button status (limited to 1 byte or 8 buttons)
    - If byte is 0x02, status is Text Message (for display on badge) (will be displayed for as long as it takes to scroll across the dislpay)
-      - Next bytes are ASCII text (max 255 characters)
+      - Next byte is text length (max 255 characters)
+      - Next bytes are ASCII text
    - If byte is 0x03, status is Pixel Message (for display on badge)  (will be displayed for 2 seconds)
       - Next 32 bytes are display columns (Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top)
    - If byte is 0x04, status is Pixel Message with display time (this enables some animations) (for display on badge)
