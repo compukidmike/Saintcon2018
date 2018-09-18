@@ -39,7 +39,7 @@ Polling Message:
    - If byte is 0x02, status is Text Message (for display on badge) 
       - Next bytes are ASCII text 
    - If byte is 0x03, status is Pixel Message (for display on badge) 
-      - Next bytes(32) are display columns 
+      - Next 32 bytes are display columns (Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top)
 
 Badge Event Message: 
 - Will be sent to minibadges when they occur
