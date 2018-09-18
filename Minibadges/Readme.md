@@ -22,3 +22,27 @@ The Chip column is so I know which I2C chips to support in the main badge code (
 | TBA | 0x52 | M24C01 |
 | bashNinja | 0x53 | M24C01 |
 | TBA | 0x54 | M24C01 |
+
+## I2C Message Protocol
+This is a preliminary message protocol for minibadges. You are more than welcome to come up with other means of communication and write the supporting code for the main badge. This is just a starting point... if you have ideas on expanding this, please contact me.  
+
+Since there isn’t an Interrupt line for the minibadges, the badge will poll each minibadge for a status byte (if supported by the minibadge).
+
+Polling Message: 
+- Will occur at regular intervals (multiple times per second) 
+- Badge will send a standard read message (address with R/W bit set to R) 
+- The byte that is returned by the minibadge will determine what happens next 
+   - If byte is 0x00, status is empty, badge will end communication 
+   - If byte is 0x01, status is Button Pressed (or similar input) 
+      - Next byte(s) is button status 
+   - If byte is 0x02, status is Text Message (for display on badge) 
+      - Next bytes are ASCII text 
+   - If byte is 0x03, status is Pixel Message (for display on badge) 
+      - Next bytes(32) are display columns 
+
+Badge Event Message: 
+- Will be sent to minibadges when they occur
+- 0x01 - HC Score Updated
+   - Next bytes(2) is score (16bit value, max score of 65535) 
+- 0x02 - Brightness Change (will also be sent after power on) 
+   - Next byte is brightness value (0-128) (Yes, 128. I know it's strange, but that's the brightness range for the LED matrix driver.)
