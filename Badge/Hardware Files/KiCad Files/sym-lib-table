@@ -1,0 +1,7 @@
+(sym_lib_table
+  (lib (name Saintcon2018-rescue)(type Legacy)(uri ${KIPRJMOD}/Saintcon2018-rescue.lib)(options "")(descr ""))
+  (lib (name saintcon-minibadge)(type Legacy)(uri ${KIPRJMOD}/saintcon-minibadge.lib)(options "")(descr ""))
+  (lib (name IS31FL3730)(type Legacy)(uri /Users/michael.whiteley/Documents/kicad/Saintcon2018/IS31FL3730.lib)(options "")(descr ""))
+  (lib (name LolinD32)(type Legacy)(uri /Users/michael.whiteley/Documents/kicad/Saintcon2018/LolinD32.lib)(options "")(descr ""))
+  (lib (name AP22802-LoadSwitch)(type Legacy)(uri C:/Users/compukidmike/Dropbox/kicad/Saintcon2018/AP22802-LoadSwitch.lib)(options "")(descr ""))
+)

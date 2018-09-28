@@ -1,0 +1,7 @@
+(fp_lib_table
+  (lib (name minibadge_kicad)(type KiCad)(uri ${KIPRJMOD}/minibadge_kicad.pretty)(options "")(descr ""))
+  (lib (name Eurocad)(type KiCad)(uri C:/Users/compukidmike/Dropbox/kicad/libraries/eurocad/Eurocad.pretty)(options "")(descr ""))
+  (lib (name LolinD32)(type KiCad)(uri ${KIPRJMOD}/LolinD32.pretty)(options "")(descr ""))
+  (lib (name IS31FL3730)(type KiCad)(uri ${KIPRJMOD}/IS31FL3730.pretty)(options "")(descr ""))
+  (lib (name Saintcon2018)(type KiCad)(uri C:/Users/compukidmike/Dropbox/kicad/Saintcon2018)(options "")(descr ""))
+)
