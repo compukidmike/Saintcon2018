@@ -28,19 +28,23 @@ The Chip column is so I know which I2C chips to support in the main badge code (
 ## I2C Message Protocol
 This is a preliminary message protocol for minibadges. You are more than welcome to come up with other means of communication and write the supporting code for the main badge. This is just a starting point... if you have ideas on expanding this, please contact me.  
 
-Since there isn’t an Interrupt line for the minibadges, the badge will poll each minibadge for a status byte (if supported by the minibadge).
+### Organization of I2C Messages
 
-### I2C Status/Type Byte Space
+- The first byte of a polling response message is the status bytes.
+- The first byte of an event message is the event type byte.
+- These messages are organized (by this first byte) into address spaces according to their purpose.
 
 | Range | Purpose | Description |
 | --- | --- | --- |
 | 0x00 - 0x3f | Badge/Minibadge | Messages between the badge and a minibadge |
-| 0x40 - 0x7f | Minibadge/Minibadge | Badge relays messages from one minibadge to another |
-| 0x80 - 0xbf | Minibadge Broadcast | Badge relays messages from one minibadge to all others|
+| 0x40 - 0x7f | Minibadge/Minibadge | Messages from one minibadge to another (relayed by the badge) |
+| 0x80 - 0xbf | Minibadge Broadcast | Messages from one minibadge to all others (relayed by the badge) |
 | 0xc0 - 0xff | TBD | |
 
 
 ### Polling Message
+
+Since there isn’t an Interrupt line for the minibadges, the badge will poll each minibadge for a status byte (if supported by the minibadge). This polling message:
 
 - Will occur at regular intervals (multiple times per second) 
 - Badge will send a standard read message (address with R/W bit set to R) 
