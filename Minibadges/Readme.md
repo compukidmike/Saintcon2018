@@ -138,7 +138,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
-| 1 | Status | 0x02 |
+| 1 | Status | 0x42 |
 | 2 | Recipient | | Minibadge address that badge should relay to |
 | 3 | Text Length | | max 255 characters |
 | 4-end | ASCII Text | | |
@@ -149,7 +149,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
-| 1 | Status | 0x03 |
+| 1 | Status | 0x43 |
 | 2 | Recipient | | Minibadge address that badge should relay to |
 | 3-34 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
 
@@ -159,7 +159,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
-| 1 | Status | 0x04 |
+| 1 | Status | 0x44 |
 | 2 | Recipient | | Minibadge address that badge should relay to |
 | 3 | Frame Duration | | Range is 0-255 x10 milliseconds, or 0-2.55 seconds in 10 millisecond increments. This will also be the amount of time before the badge polls the minibadge again for the next animation frame. |
 | 4-35 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
@@ -171,12 +171,61 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
-| 1 | Status | 0x05 |
+| 1 | Status | 0x45 |
 | 2 | Recipient | | Minibadge address that badge should relay to |
 | 3 | Data Length | | max 255 bytes |
 | 4 - end | Custom Data | | |
 
    - Badge will raise `[from minibadge] Custom Data` event to minibadge at `Recipient` address.
+
+####[broadcast] Button Pressed
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x81 |
+| 2 | Buttons | | limited to 1 byte or 8 buttons |
+
+   - Badge will raise `[broadcast] Button Pressed` event to minibadges at all addresses.
+
+####[broadcast] Text Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x82 |
+| 2 | Text Length | | max 255 characters |
+| 3-end | ASCII Text | | |
+
+   - Badge will raise `[broadcast] Text Message` event to minibadges at all addresses.
+
+####[broadcast] Pixel Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x83 |
+| 2-33 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Badge will raise `[broadcast] Pixel Message` event to minibadges at all addresses.
+
+####[broadcast] Pixel Animation Frame
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x84 |
+| 2 | Frame Duration | | Range is 0-255 x10 milliseconds, or 0-2.55 seconds in 10 millisecond increments. This will also be the amount of time before the badge polls the minibadge again for the next animation frame. |
+| 3-34 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Badge will raise `[broadcast] Pixel Animation Frame` event to minibadges at all addresses.
+   - Badge will then poll minibadge for the next frame.
+
+####[broadcast] Custom Data
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x85 |
+| 2 | Data Length | | max 255 bytes |
+| 3 - end | Custom Data | | |
+
+   - Badge will raise `[broadcast] Custom Data` event to minibadges at all addresses.
 
 ###Event Messages
 
@@ -208,7 +257,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
-| 1 | Type | 0x01 |
+| 1 | Type | 0x02 |
 | 2 | Brightness | 0-128 | Yes, 128. I know it's strange, but that's the brightness range for the LED matrix driver. |
 
 ####[from minibadge] Button Pressed
@@ -225,7 +274,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
-| 1 | Status | 0x02 |
+| 1 | Status | 0x42 |
 | 2 | Sender | | Minibadge address that authored this message |
 | 3 | Text Length | | max 255 characters |
 | 4-end | ASCII Text | | |
@@ -236,7 +285,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
-| 1 | Status | 0x03 |
+| 1 | Status | 0x43 |
 | 2 | Sender | | Minibadge address that authored this message |
 | 3-34 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
 
@@ -246,7 +295,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
-| 1 | Status | 0x04 |
+| 1 | Status | 0x44 |
 | 2 | Sender | | Minibadge address that authored this message |
 | 3 | Frame Duration | | Range is 0-255 x10 milliseconds, or 0-2.55 seconds in 10 millisecond increments. This will also be the amount of time before the badge polls the minibadge again for the next animation frame. |
 | 4-35 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
@@ -258,10 +307,64 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
-| 1 | Status | 0x05 |
+| 1 | Status | 0x45 |
 | 2 | Sender | | Minibadge address that authored this message |
 | 3 | Data Length | | max 255 bytes |
 | 4 - end | Custom Data | | |
 
    - Minibadge at address `Sender` sent `[to minibadge] Custom Data`, identifying this minbadge as the `Recipient`.
+
+####[broadcast] Button Pressed
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Type | 0x81 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3 | Buttons | | limited to 1 byte or 8 buttons |
+
+   - Minibadge at address `Sender` sent `[broadcast] Button Pressed`.
+
+####[broadcast] Text Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x82 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3 | Text Length | | max 255 characters |
+| 4-end | ASCII Text | | |
+
+   - Minibadge at address `Sender` sent `[broadcast] Text Message`.
+
+####[broadcast] Pixel Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x83 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3-34 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Minibadge at address `Sender` sent `[broadcast] Pixel Message`.
+
+####[broadcast] Pixel Animation Frame
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x84 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3 | Frame Duration | | Range is 0-255 x10 milliseconds, or 0-2.55 seconds in 10 millisecond increments. This will also be the amount of time before the badge polls the minibadge again for the next animation frame. |
+| 4-35 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Minibadge at address `Sender` sent `[broadcast] Pixel Animation Frame`.
+   - Badge will poll `Sender` for another frame. Another event might result.
+
+####[broadcast] Custom Data
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x85 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3 | Data Length | | max 255 bytes |
+| 4 - end | Custom Data | | |
+
+   - Minibadge at address `Sender` sent `[to minibadge] Custom Data`.
 
