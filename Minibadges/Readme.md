@@ -40,13 +40,13 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 | 0xc0 - 0xff | TBD | |
 
 
-###Polling Message
+### Polling Message
 
 - Will occur at regular intervals (multiple times per second) 
 - Badge will send a standard read message (address with R/W bit set to R) 
 - The byte that is returned by the minibadge will determine what happens next 
 
-####Polling Message Responses
+#### Polling Message Responses
 
 | Status Byte | Status | Introduced |
 | --- | --- | --- |
@@ -67,7 +67,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 | 0x84 | [broadcast] Pixel Animation Frame | 2020 |
 | 0x85 | [broadcast] Custom Data | 2020 |
 
-####None
+#### None
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -75,7 +75,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will end communication.
 
-####[to badge] Button Pressed
+#### [to badge] Button Pressed
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -84,7 +84,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - This just passes `Buttons` state to the badge. Badge code will have to be written to do something with that data.
 
-####[to badge] Text Message
+#### [to badge] Text Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -94,7 +94,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will display `ASCII Text` for as long as it takes to scroll across the display
 
-####[to badge] Pixel Message
+#### [to badge] Pixel Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -103,7 +103,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will display `Display Columns` for 2 seconds
 
-####[to badge] Pixel Animation Frame
+#### [to badge] Pixel Animation Frame
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -114,7 +114,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
    - Badge will display `Display Columns` for `Frame Duration` centiseconds.
    - Badge will then poll minibadge for the next frame.
 
-####[to badge] Custom Data
+#### [to badge] Custom Data
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -124,7 +124,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - This allows your minibadge to pass `Custom Data` to the badge. Badge code will have to be written to do something with that data.
 
-####[to minibadge] Button Pressed
+#### [to minibadge] Button Pressed
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -134,7 +134,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will raise `[from minibadge] Button Pressed` event to minibadge at `Recipient` address.
 
-####[to minibadge] Text Message
+#### [to minibadge] Text Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -145,7 +145,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will raise `[from minibadge] Text Message` event to minibadge at `Recipient` address.
 
-####[to minibadge] Pixel Message
+#### [to minibadge] Pixel Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -155,7 +155,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will raise `[from minibadge] Pixel Message` event to minibadge at `Recipient` address.
 
-####[to minibadge] Pixel Animation Frame
+#### [to minibadge] Pixel Animation Frame
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -167,7 +167,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
    - Badge will raise `[from minibadge] Pixel Animation Frame` event to minibadge at `Recipient` address.
    - Badge will then poll minibadge for the next frame.
 
-####[to minibadge] Custom Data
+#### [to minibadge] Custom Data
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -178,7 +178,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will raise `[from minibadge] Custom Data` event to minibadge at `Recipient` address.
 
-####[broadcast] Button Pressed
+#### [broadcast] Button Pressed
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -187,7 +187,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will raise `[broadcast] Button Pressed` event to minibadges at all addresses.
 
-####[broadcast] Text Message
+#### [broadcast] Text Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -197,7 +197,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will raise `[broadcast] Text Message` event to minibadges at all addresses.
 
-####[broadcast] Pixel Message
+#### [broadcast] Pixel Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -206,7 +206,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will raise `[broadcast] Pixel Message` event to minibadges at all addresses.
 
-####[broadcast] Pixel Animation Frame
+#### [broadcast] Pixel Animation Frame
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -217,7 +217,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
    - Badge will raise `[broadcast] Pixel Animation Frame` event to minibadges at all addresses.
    - Badge will then poll minibadge for the next frame.
 
-####[broadcast] Custom Data
+#### [broadcast] Custom Data
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -227,7 +227,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Badge will raise `[broadcast] Custom Data` event to minibadges at all addresses.
 
-###Event Messages
+### Event Messages
 
 - Will be sent to minibadges when they occur
 
@@ -246,21 +246,21 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 | 0x84 | [broadcast] Pixel Animation Frame | 2020 |
 | 0x85 | [broadcast] Custom Data | 2020 |
 
-####[from badge] HC Score Updated
+#### [from badge] HC Score Updated
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
 | 1 | Type | 0x01 |
 | 2-3 | Score | 0-65535 | 16bit value, max score of 65535 |
 
-####[from badge] Brightness Changed
+#### [from badge] Brightness Changed
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
 | 1 | Type | 0x02 |
 | 2 | Brightness | 0-128 | Yes, 128. I know it's strange, but that's the brightness range for the LED matrix driver. |
 
-####[from minibadge] Button Pressed
+#### [from minibadge] Button Pressed
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -270,7 +270,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Minibadge at address `Sender` sent `[to minibadge] Button Pressed`, identifying this minbadge as the `Recipient`.
 
-####[from minibadge] Text Message
+#### [from minibadge] Text Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -281,7 +281,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Minibadge at address `Sender` sent `[to minibadge] Text Message`, identifying this minbadge as the `Recipient`.
 
-####[from minibadge] Pixel Message
+#### [from minibadge] Pixel Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -291,7 +291,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Minibadge at address `Sender` sent `[to minibadge] Pixel Message`, identifying this minbadge as the `Recipient`.
 
-####[from minibadge] Pixel Animation Frame
+#### [from minibadge] Pixel Animation Frame
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -303,7 +303,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
    - Minibadge at address `Sender` sent `[to minibadge] Pixel Animation Frame`, identifying this minbadge as the `Recipient`.
    - Badge will poll `Sender` for another frame. Another event might result.
 
-####[from minibadge] Custom Data
+#### [from minibadge] Custom Data
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -314,7 +314,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Minibadge at address `Sender` sent `[to minibadge] Custom Data`, identifying this minbadge as the `Recipient`.
 
-####[broadcast] Button Pressed
+#### [broadcast] Button Pressed
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -324,7 +324,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Minibadge at address `Sender` sent `[broadcast] Button Pressed`.
 
-####[broadcast] Text Message
+#### [broadcast] Text Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -335,7 +335,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Minibadge at address `Sender` sent `[broadcast] Text Message`.
 
-####[broadcast] Pixel Message
+#### [broadcast] Pixel Message
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -345,7 +345,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
 
    - Minibadge at address `Sender` sent `[broadcast] Pixel Message`.
 
-####[broadcast] Pixel Animation Frame
+#### [broadcast] Pixel Animation Frame
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
@@ -357,7 +357,7 @@ Since there isn’t an Interrupt line for the minibadges, the badge will poll ea
    - Minibadge at address `Sender` sent `[broadcast] Pixel Animation Frame`.
    - Badge will poll `Sender` for another frame. Another event might result.
 
-####[broadcast] Custom Data
+#### [broadcast] Custom Data
 
 | Byte | Purpose | Value | Description |
 | --- | --- | --- | --- |
