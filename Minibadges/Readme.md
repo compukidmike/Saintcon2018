@@ -30,28 +30,238 @@ This is a preliminary message protocol for minibadges. You are more than welcome
 
 Since there isn’t an Interrupt line for the minibadges, the badge will poll each minibadge for a status byte (if supported by the minibadge).
 
-Polling Message: 
+### I2C Status/Type Byte Space
+
+| Range | Purpose | Description |
+| --- | --- | --- |
+| 0x00 - 0x3f | Badge/Minibadge | Messages between the badge and a minibadge |
+| 0x40 - 0x7f | Minibadge/Minibadge | Badge relays messages from one minibadge to another |
+| 0x80 - 0xbf | Minibadge Broadcast | Badge relays messages from one minibadge to all others|
+| 0xc0 - 0xff | TBD | |
+
+
+###Polling Message
+
 - Will occur at regular intervals (multiple times per second) 
 - Badge will send a standard read message (address with R/W bit set to R) 
 - The byte that is returned by the minibadge will determine what happens next 
-   - If byte is 0x00, status is empty, badge will end communication 
-   - If byte is 0x01, status is Button Pressed (or similar input) (NOTE: this just passes button state to the badge. You'll have to write some code to do something with that data)
-      - Next byte is button status (limited to 1 byte or 8 buttons)
-   - If byte is 0x02, status is Text Message (for display on badge) (will be displayed for as long as it takes to scroll across the dislpay)
-      - Next byte is text length (max 255 characters)
-      - Next bytes are ASCII text
-   - If byte is 0x03, status is Pixel Message (for display on badge)  (will be displayed for 2 seconds)
-      - Next 32 bytes are display columns (Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top)
-   - If byte is 0x04, status is Pixel Message with display time (this enables some animations) (for display on badge)
-      - Next byte is time to display message (range is 0-255 x10 milliseconds, or 0-2.55 seconds in 10 millisecond increments). This will also be the amount of time before the badge polls the minibadge again for the next animation frame
-      - Next 32 bytes are display columns (Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top)
-   - If byte is 0x05, status is Custom Data (this allows your minibadge to send custom data to the badge that will require writing code for the badge to do something with it)
-      - Next byte is length of data in bytes
-      - Next bytes are custom data
 
-Badge Event Message: 
+####Polling Message Responses
+
+| Status Byte | Status | Introduced |
+| --- | --- | --- |
+| 0x00 | None | 2018 |
+| 0x01 | [to badge] Button Pressed | 2018 |
+| 0x02 | [to badge] Text Message | 2018 |
+| 0x03 | [to badge] Pixel Message | 2018 |
+| 0x04 | [to badge] Pixel Animation Frame | 2018 |
+| 0x05 | [to badge] Custom Data | 2018 |
+| 0x41 | [to minibadge] Button Pressed | 2020 |
+| 0x42 | [to minibadge] Text Message | 2020 |
+| 0x43 | [to minibadge] Pixel Message | 2020 |
+| 0x44 | [to minibadge] Pixel Animation Frame | 2020 |
+| 0x45 | [to minibadge] Custom Data | 2020 |
+| 0x81 | [broadcast] Button Pressed | 2020 |
+| 0x82 | [broadcast] Text Message | 2020 |
+| 0x83 | [broadcast] Pixel Message | 2020 |
+| 0x84 | [broadcast] Pixel Animation Frame | 2020 |
+| 0x85 | [broadcast] Custom Data | 2020 |
+
+####None
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x00 |
+
+   - Badge will end communication.
+
+####[to badge] Button Pressed
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x01 |
+| 2 | Buttons | | limited to 1 byte or 8 buttons |
+
+   - This just passes `Buttons` state to the badge. Badge code will have to be written to do something with that data.
+
+####[to badge] Text Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x02 |
+| 2 | Text Length | | max 255 characters |
+| 3-end | ASCII Text | | |
+
+   - Badge will display `ASCII Text` for as long as it takes to scroll across the display
+
+####[to badge] Pixel Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x03 |
+| 2-33 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Badge will display `Display Columns` for 2 seconds
+
+####[to badge] Pixel Animation Frame
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x04 |
+| 2 | Frame Duration | | Range is 0-255 x10 milliseconds, or 0-2.55 seconds in 10 millisecond increments. This will also be the amount of time before the badge polls the minibadge again for the next animation frame. |
+| 3-34 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Badge will display `Display Columns` for `Frame Duration` centiseconds.
+   - Badge will then poll minibadge for the next frame.
+
+####[to badge] Custom Data
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x05 |
+| 2 | Data Length | | max 255 bytes |
+| 3 - end | Custom Data | | |
+
+   - This allows your minibadge to pass `Custom Data` to the badge. Badge code will have to be written to do something with that data.
+
+####[to minibadge] Button Pressed
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x41 |
+| 2 | Recipient | | Minibadge address that badge should relay to |
+| 3 | Buttons | | limited to 1 byte or 8 buttons |
+
+   - Badge will raise `[from minibadge] Button Pressed` event to minibadge at `Recipient` address.
+
+####[to minibadge] Text Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x02 |
+| 2 | Recipient | | Minibadge address that badge should relay to |
+| 3 | Text Length | | max 255 characters |
+| 4-end | ASCII Text | | |
+
+   - Badge will raise `[from minibadge] Text Message` event to minibadge at `Recipient` address.
+
+####[to minibadge] Pixel Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x03 |
+| 2 | Recipient | | Minibadge address that badge should relay to |
+| 3-34 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Badge will raise `[from minibadge] Pixel Message` event to minibadge at `Recipient` address.
+
+####[to minibadge] Pixel Animation Frame
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x04 |
+| 2 | Recipient | | Minibadge address that badge should relay to |
+| 3 | Frame Duration | | Range is 0-255 x10 milliseconds, or 0-2.55 seconds in 10 millisecond increments. This will also be the amount of time before the badge polls the minibadge again for the next animation frame. |
+| 4-35 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Badge will raise `[from minibadge] Pixel Animation Frame` event to minibadge at `Recipient` address.
+   - Badge will then poll minibadge for the next frame.
+
+####[to minibadge] Custom Data
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x05 |
+| 2 | Recipient | | Minibadge address that badge should relay to |
+| 3 | Data Length | | max 255 bytes |
+| 4 - end | Custom Data | | |
+
+   - Badge will raise `[from minibadge] Custom Data` event to minibadge at `Recipient` address.
+
+###Event Messages
+
 - Will be sent to minibadges when they occur
-- 0x01 - HC Score Updated
-   - Next bytes(2) is score (16bit value, max score of 65535) 
-- 0x02 - Brightness Change (will also be sent after power on) 
-   - Next byte is brightness value (0-128) (Yes, 128. I know it's strange, but that's the brightness range for the LED matrix driver.)
+
+| Type Byte | Type | Introduced |
+| --- | --- | --- |
+| 0x01 | [from badge] HC Score Updated | 2018 |
+| 0x02 | [from badge] Brightness Changed | 2018 |
+| 0x41 | [from minibadge] Button Pressed | 2020 |
+| 0x42 | [from minibadge] Text Message | 2020 |
+| 0x43 | [from minibadge] Pixel Message | 2020 |
+| 0x44 | [from minibadge] Pixel Animation Frame | 2020 |
+| 0x45 | [from minibadge] Custom Data | 2020 |
+| 0x81 | [broadcast] Button Pressed | 2020 |
+| 0x82 | [broadcast] Text Message | 2020 |
+| 0x83 | [broadcast] Pixel Message | 2020 |
+| 0x84 | [broadcast] Pixel Animation Frame | 2020 |
+| 0x85 | [broadcast] Custom Data | 2020 |
+
+####[from badge] HC Score Updated
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Type | 0x01 |
+| 2-3 | Score | 0-65535 | 16bit value, max score of 65535 |
+
+####[from badge] Brightness Changed
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Type | 0x01 |
+| 2 | Brightness | 0-128 | Yes, 128. I know it's strange, but that's the brightness range for the LED matrix driver. |
+
+####[from minibadge] Button Pressed
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Type | 0x41 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3 | Buttons | | limited to 1 byte or 8 buttons |
+
+   - Minibadge at address `Sender` sent `[to minibadge] Button Pressed`, identifying this minbadge as the `Recipient`.
+
+####[from minibadge] Text Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x02 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3 | Text Length | | max 255 characters |
+| 4-end | ASCII Text | | |
+
+   - Minibadge at address `Sender` sent `[to minibadge] Text Message`, identifying this minbadge as the `Recipient`.
+
+####[from minibadge] Pixel Message
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x03 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3-34 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Minibadge at address `Sender` sent `[to minibadge] Pixel Message`, identifying this minbadge as the `Recipient`.
+
+####[from minibadge] Pixel Animation Frame
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x04 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3 | Frame Duration | | Range is 0-255 x10 milliseconds, or 0-2.55 seconds in 10 millisecond increments. This will also be the amount of time before the badge polls the minibadge again for the next animation frame. |
+| 4-35 | Display Columns | | Display is 8x32 pixels. 0,0 is bottom left corner. So first byte will fill the first column from bottom to top. |
+
+   - Minibadge at address `Sender` sent `[to minibadge] Pixel Animation Frame`, identifying this minbadge as the `Recipient`.
+   - Badge will poll `Sender` for another frame. Another event might result.
+
+####[from minibadge] Custom Data
+
+| Byte | Purpose | Value | Description |
+| --- | --- | --- | --- |
+| 1 | Status | 0x05 |
+| 2 | Sender | | Minibadge address that authored this message |
+| 3 | Data Length | | max 255 bytes |
+| 4 - end | Custom Data | | |
+
+   - Minibadge at address `Sender` sent `[to minibadge] Custom Data`, identifying this minbadge as the `Recipient`.
+
