@@ -7,7 +7,9 @@ This year's badge features an ESP32 WiFi module running MicroPython. It has an 8
 You'll need some software to flash the code on your badge. 
 The first thing you'll need is Python 3. This can be downloaded from https://www.python.org/downloads/
 Once you have python installed, open a terminal/command prompt and run the following command: **pip install esptool**
-You now have the tools you need to flash the code on your badge. Download **Saintcon2018.bin** from this github repository. Then, in a terminal window, navigate to the location of the badge firmware file, and run the following command, substituting the COM5 for the name of your badge serial port (this will vary depending on OS): **python esptool.py --port COM5 --baud 460800 write_flash --flash_size=detect 0 Saintcon2018.bin**
+You now have the tools you need to flash the code on your badge. Download **Saintcon2018.bin** from this github repository. 
+Next, you will need to place the LOLIN D32 board into a mode where you can flash it's code.  To do this, you must pull GPIO pin 0 to ground.  This is best done by placing the LOLIN D32 board into a breadboard and pulling GPIO pin 0 to ground with a jumper wire.
+Then, in a terminal window, navigate to the location of the badge firmware file, and run the following command, substituting the COM5 for the name of your badge serial port (this will vary depending on OS): **python esptool.py --port COM5 --baud 460800 write_flash --flash_size=detect 0 Saintcon2018.bin**
 
 ## Charging Your Badge
 Simply use a microUSB cable to connect the badge to a USB power source (computer, phone charger, etc). This will power the badge as well as charge the battery.
